@@ -86,7 +86,7 @@ const getDataFeeds = async () => {
         //   result = parseFloat(percentage.toFixed(5));
         // }
 
-        let jsonObject = {
+      let jsonObject = {
           id: i,
           description: descriptions[i],
           decimals: decimal,

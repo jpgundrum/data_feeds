@@ -12,6 +12,24 @@ import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 contract DataConsumerV3 {
 
+    event AddedDecmials(
+        uint8[] decimals_data
+    );
+
+    event AddedDecriptions(
+        string[] decimals_data
+    );
+
+    event AddedPrice(
+        int[] price_data
+    );
+
+    event ClearArrayData(
+        uint8[] decimals_data,
+        string[] description_data,
+        int[] price_data
+    );
+
     AggregatorV3Interface[] public dataFeeds;
     uint8[] public decimals_data;
     string[] public description_data;
@@ -73,21 +91,17 @@ contract DataConsumerV3 {
         addDataAggregator(0x8e604308BD61d975bc6aE7903747785Db7dE97e2); // ETH-USD 30-Day Realized Volatility
         addDataAggregator(0xfD59B51F25E0Ab790a4F0c483BaC194FA0479D29); // LINK-USD 24hr Realized Volatility
         addDataAggregator(0xd599cEF88Bbd27F1392A544bD0F343ec8893124C); // LINK-USD 30-Day Realized Volatility
-
-        // ADD 7-day Volatility
     }
 
-// TODO update function comments to have same format
-
     /**
-    Creates a new instance of the AggregatorV3Interface whose API reference
-    can be found at https://docs.chain.link/data-feeds/api-reference
-
-    Parameters:
-    -----------
-    address: data_link
-        Price feed contract addresses
-            - https://docs.chain.link/data-feeds/price-feeds/addresses?network=ethereum&page=1
+     * Creates a new instance of the AggregatorV3Interface whose API reference
+     * can be found at https://docs.chain.link/data-feeds/api-reference
+     * 
+     * Parameters:
+     * -----------
+     * address: data_link
+     *    Price feed contract addresses
+     *       - https://docs.chain.link/data-feeds/price-feeds/addresses?network=ethereum&page=1
      */
     function addDataAggregator(address data_link) private {
         dataFeeds.push(AggregatorV3Interface(data_link)); 
@@ -106,40 +120,42 @@ contract DataConsumerV3 {
     }
 
     /**
-    Adds decimals to the decimals array to keep track of decimal data
-
+     * Adds decimals to the decimals array to keep track of decimal data
+     * 
      */
     function addDecimals() public {
         AggregatorOperationLoop(0);
+        emit AddedDecmials(decimals_data);
     }
 
     /**
-    Returns an array of tracked decimals
-
-    Returns:
-    --------
-    uint[]: decimals_data
-        Decimals for the aggregators
+     * View array of tracked decimals
+     * 
+     * Returns:
+     * --------
+     * uint[]: decimals_data
+     *    Decimals for the aggregators
      */
     function viewDecimals() public view returns (uint8[] memory) {
         return decimals_data;
     }
 
-        /**
-    Adds description to the description array to keep track of description data
-
+    /**
+     * Adds description to the description array to keep track of description data
+     * 
      */
     function addDescription() public {
         AggregatorOperationLoop(1);
+        emit AddedDecriptions(description_data);
     }
 
     /**
-    Returns an array of tracked descriptions
-
-    Returns:
-    --------
-    string[]: decimals_data
-        Description for the aggregators
+     * Returns an array of tracked descriptions
+     * 
+     * Returns:
+     * --------
+     * string[]: decimals_data
+     *   Description for the aggregators
      */
     function viewDescription() public view returns (string[] memory) {
         return description_data;
@@ -147,28 +163,29 @@ contract DataConsumerV3 {
     
     /**
      * Adds price to the price array to keep track of price data
-
+     * 
      */
     function addPrice() public {
         AggregatorOperationLoop(2);
+        emit AddedPrice(price_data);
     }
 
     /**
-    Returns an array of tracked prices
-
-    Returns:
-    --------
-    int[]: price_data
-        Price for the aggregators
+     * Returns an array of tracked prices
+     * 
+     * Returns:
+     * --------
+     * int[]: price_data
+     *   Price for the aggregators
      */
     function viewPrice() public view returns (int[] memory) {
         return price_data;
     }
 
     /**
-    Assigns Aggregator data to appropriate array based on 
-    the key sent
-
+     * Assigns Aggregator data to appropriate array based on 
+     * the key sent
+     * 
      */
     function AggregatorOperationLoop(uint key) private { // TODO if broken change back to public
         for (uint i=0; i<dataFeeds.length; i++) {
@@ -194,9 +211,10 @@ contract DataConsumerV3 {
    }
 
     /**
-    Removes all previously stored arrays
+     * Removes all previously stored arrays
      */
    function clearArray() public {
+        emit ClearArrayData(decimals_data, description_data, price_data);
         delete decimals_data;
         delete description_data;
         delete price_data;

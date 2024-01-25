@@ -9,9 +9,9 @@ module.exports = {
     hardhat: { // used to connect localhost hardhat node to metamask
       chainId: 1337,
     },
-    sepolia: {
-      url: API_URL,
-      accounts: [`0x${PRIVATE_KEY}`] // DD NOT UPLOAD WITH PRIVATE KEY better to use env vars
-    }
+    // sepolia: {
+    //   url: API_URL,
+    //   accounts: [`0x${PRIVATE_KEY}`] // DD NOT UPLOAD WITH PRIVATE KEY better to use env vars
+    // }
   }
 };
